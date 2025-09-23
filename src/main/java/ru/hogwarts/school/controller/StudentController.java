@@ -35,15 +35,15 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/age/{age}")
-    public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
-        return ResponseEntity.ok(studentService.getStudentByAge(age));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Student>> getAllStudent() {
-        return ResponseEntity.ok(studentService.getAllStudent());
-    }
+//    @GetMapping("/age/{age}")
+//    public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
+//        return ResponseEntity.ok(studentService.getStudentByAge(age));
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<Student>> getAllStudent() {
+//        return ResponseEntity.ok(studentService.getAllStudent());
+//    }
 
     @PutMapping()
     public ResponseEntity<Student> putStudent(@RequestBody Student student) {
@@ -56,11 +56,8 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(studentService.deleteStudent(id));
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 }
