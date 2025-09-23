@@ -2,7 +2,6 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.exception.IncorrectIdException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -27,32 +26,33 @@ public class StudentController {
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        try {
-            Student student = studentService.readStudent(id);
-            return ResponseEntity.ok(student);
-        } catch (IncorrectIdException e) {
+        Student student = studentService.readStudent(id);
+        if (student == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(student);
     }
 
-//    @GetMapping("/age/{age}")
-//    public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
-//        return ResponseEntity.ok(studentService.getStudentByAge(age));
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<Student>> getAllStudent() {
-//        return ResponseEntity.ok(studentService.getAllStudent());
-//    }
+    @GetMapping("/age/{age}")
+    public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
+        if (age < 1) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(studentService.getStudentByAge(age));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Student>> getAllStudent() {
+        return ResponseEntity.ok(studentService.getAllStudent());
+    }
 
     @PutMapping()
     public ResponseEntity<Student> putStudent(@RequestBody Student student) {
-        try {
-            Student student1 = studentService.updateStudent(student);
-            return ResponseEntity.ok(student1);
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
+        Student student1 = studentService.updateStudent(student);
+        if (student1 == null) {
+            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.ok(student1);
     }
 
     @DeleteMapping("{id}")

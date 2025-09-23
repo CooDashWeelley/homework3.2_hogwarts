@@ -1,13 +1,10 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.exception.IncorrectIdException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StudentService {
@@ -35,16 +32,12 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-//    public List<Student> getStudentByAge(int age) {
-//        if (age < 1) {
-//            throw new IncorrectIdException();
-//        }
-//        return students.values().stream()
-//                .filter(e -> e.getAge() == age)
-//                .toList();
-//    }
-//
-//    public List<Student> getAllStudent() {
-//        return students.values().stream().toList();
-//    }
+    public List<Student> getAllStudent() {
+        return studentRepository.findAll();
+    }
+
+    public List<Student> getStudentByAge(int age) {
+        return studentRepository.findByAge(age);
+    }
+
 }
