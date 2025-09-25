@@ -1,8 +1,10 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.List;
@@ -37,10 +39,17 @@ public class FacultyService {
     }
 
     public List<Faculty> getFacultyByColor(String color) {
-        return facultyRepository.findByColor(color);
+        if (color == null || color.isBlank()) {
+            throw new IncorrectColorException("Incorrect color");
+        }
+        return facultyRepository.findByColorIgnoreCase(color);
     }
 
     public List<Faculty> getAllFaculty() {
         return facultyRepository.findAll();
+    }
+
+    public List<Student> getStudentsByFaculty(String color) {
+        return getFacultyByColor(color).get(0).getStudentsByFaculty();
     }
 }

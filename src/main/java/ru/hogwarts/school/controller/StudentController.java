@@ -2,6 +2,8 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.exception.AgeLessOneException;
+import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -28,7 +30,7 @@ public class StudentController {
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        try  {
+        try {
             Student student = studentService.readStudent(id);
             return ResponseEntity.ok(student);
         } catch (NoFoundException e) {
@@ -36,16 +38,23 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/age/{age}")
-    public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
-        if (age < 1) {
+//    @GetMapping("{id}/faculty")
+//    public ResponseEntity<>
+
+    @GetMapping
+    public ResponseEntity<List<Student>> getStudent(@RequestParam(required = false) Integer age,
+                                                    @RequestParam(required = false) Integer min,
+                                                    @RequestParam(required = false) Integer max) {
+        try {
+            if (age != null) {
+                return ResponseEntity.ok(studentService.getStudentByAge(age));
+            }
+            if (min != null && max != null) {
+                return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
+            }
+        } catch (AgeLessOneException | IncorrectAgeException e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(studentService.getStudentByAge(age));
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.getAllStudent());
     }
 
