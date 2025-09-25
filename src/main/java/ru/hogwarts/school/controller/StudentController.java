@@ -2,7 +2,8 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.exception.IncorrectIdException;
+import ru.hogwarts.school.exception.NoFoundException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -26,41 +27,40 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        try {
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        try  {
             Student student = studentService.readStudent(id);
             return ResponseEntity.ok(student);
-        } catch (IncorrectIdException e) {
+        } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/age/{age}")
     public ResponseEntity<List<Student>> getStudentByAge(@RequestParam("age") int age) {
+        if (age < 1) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(studentService.getStudentByAge(age));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.getAllStudent());
     }
 
     @PutMapping()
     public ResponseEntity<Student> putStudent(@RequestBody Student student) {
-        try {
-            Student student1 = studentService.updateStudent(student);
-            return ResponseEntity.ok(student1);
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
+        Student student1 = studentService.updateStudent(student);
+        if (student1 == null) {
+            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.ok(student1);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(studentService.deleteStudent(id));
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 }

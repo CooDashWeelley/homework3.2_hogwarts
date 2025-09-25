@@ -2,7 +2,7 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.exception.IncorrectIdException;
+import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
@@ -24,17 +24,17 @@ public class FacultyController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        try {
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+        try  {
             Faculty faculty = facultyService.readFaculty(id);
             return ResponseEntity.ok(faculty);
-        } catch (IncorrectIdException e) {
+        } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<Faculty>> getFacultyByColor(@RequestParam("color") String color) {
+    @GetMapping("/color/{color}")
+    public ResponseEntity<List<Faculty>> getFacultyByColor(@PathVariable("color") String color) {
         return ResponseEntity.ok(facultyService.getFacultyByColor(color));
     }
 
@@ -45,20 +45,15 @@ public class FacultyController {
 
     @PutMapping()
     public ResponseEntity<Faculty> putFaculty(@RequestBody Faculty faculty) {
-        try {
-            Faculty faculty1 = facultyService.updateFaculty(faculty);
-            return ResponseEntity.ok(faculty1);
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
+        Faculty faculty1 = facultyService.updateFaculty(faculty);
+        if (faculty1 == null) {
+            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.ok(faculty1);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(facultyService.deleteFaculty(id));
-        } catch (IncorrectIdException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity deleteFaculty(@PathVariable Long id) {
+        return ResponseEntity.ok().build();
     }
 }
