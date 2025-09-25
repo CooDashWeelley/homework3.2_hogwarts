@@ -2,6 +2,7 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
@@ -23,12 +24,13 @@ public class FacultyController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        Faculty faculty = facultyService.readFaculty(id);
-        if (faculty == null) {
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+        try  {
+            Faculty faculty = facultyService.readFaculty(id);
+            return ResponseEntity.ok(faculty);
+        } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(faculty);
     }
 
     @GetMapping("/color/{color}")
