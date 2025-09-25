@@ -18,7 +18,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "faculty")
-//    @JsonIgnore
+//    @JsonIgnore                       try DTO
     private Faculty faculty;
 
     public Faculty getFaculty() {
