@@ -1,7 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -11,14 +9,13 @@ public class Student {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     private String name;
     private int age;
 
     @ManyToOne
     @JoinColumn(name = "faculty")
-//    @JsonIgnore                       try DTO
     private Faculty faculty;
 
     public Faculty getFaculty() {
@@ -26,7 +23,7 @@ public class Student {
     }
 
     public void setFaculty(Faculty faculty) {
-        this.faculty  = faculty;
+        this.faculty = faculty;
     }
 
     public long getId() {

@@ -2,6 +2,7 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.AgeLessOneException;
 import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.NoFoundException;
@@ -29,9 +30,9 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
         try {
-            Student student = studentService.readStudent(id);
+            StudentDTO student = studentService.readStudent(id);
             return ResponseEntity.ok(student);
         } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
@@ -42,7 +43,7 @@ public class StudentController {
 //    public ResponseEntity<>
 
     @GetMapping
-    public ResponseEntity<List<Student>> getStudent(@RequestParam(required = false) Integer age,
+    public ResponseEntity<List<StudentDTO>> getStudent(@RequestParam(required = false) Integer age,
                                                     @RequestParam(required = false) Integer min,
                                                     @RequestParam(required = false) Integer max) {
         try {

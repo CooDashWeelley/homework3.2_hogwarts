@@ -2,6 +2,8 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.dto.FacultyDTO;
+import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
@@ -26,9 +28,9 @@ public class FacultyController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
         try {
-            Faculty faculty = facultyService.readFaculty(id);
+            FacultyDTO faculty = facultyService.readFaculty(id);
             return ResponseEntity.ok(faculty);
         } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
@@ -36,7 +38,7 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Faculty>> getFaculty(@RequestParam(required = false) String color,
+    public ResponseEntity<List<FacultyDTO>> getFaculty(@RequestParam(required = false) String color,
                                                     @RequestParam(required = false) String name) {
         try {
             if (color != null) {
@@ -52,7 +54,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{color}/student")
-    public ResponseEntity<List<Student>> getStudentByColor(@PathVariable String color) {
+    public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
         return  ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
     }
 

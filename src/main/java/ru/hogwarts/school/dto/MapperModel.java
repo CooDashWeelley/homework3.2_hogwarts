@@ -1,0 +1,36 @@
+package ru.hogwarts.school.dto;
+
+import org.springframework.stereotype.Component;
+import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
+@Component
+public class MapperModel {
+    public static StudentDTO toStudentDTO(Student student) {
+        return new StudentDTO(
+                student.getId(),
+                student.getName(),
+                student.getAge(),
+                student.getFaculty() != null ? student.getFaculty().getId() : null,
+                student.getFaculty() != null ? student.getFaculty().getName() : null,
+                student.getFaculty() != null ? student.getFaculty().getColor() : null
+        );
+    }
+
+//    public static List<StudentDTO> toStudentDTOList(List<Student> students) {
+//        return students.stream()
+//                .map(MapperModel::toStudentDTO)
+//                .toList();
+//    }
+
+    public static FacultyDTO toFacultyDTO(Faculty faculty) {
+//        List<StudentDTO> students = faculty.getStudentsByFaculty().stream()
+//                .map(MapperModel::toStudentDTO)
+//                .toList();
+        return new FacultyDTO(
+                faculty.getId(),
+                faculty.getName(),
+                faculty.getColor()
+//                students
+        );
+    }
+}

@@ -1,21 +1,27 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.dto.FacultyDTO;
+import ru.hogwarts.school.dto.MapperModel;
+import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FacultyService {
 
-    private FacultyRepository facultyRepository;
+    private final FacultyRepository facultyRepository;
+    private final MapperModel mapper;
 
-    public FacultyService(FacultyRepository facultyRepository) {
+    public FacultyService(FacultyRepository facultyRepository, MapperModel mapper) {
         this.facultyRepository = facultyRepository;
+        this.mapper = mapper;
     }
     //crud: create, read,  update, delete
 
@@ -23,11 +29,12 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    public Faculty readFaculty(Long id) {
-        if (facultyRepository.findById(id).isEmpty()) {
+    public FacultyDTO readFaculty(Long id) {
+        Optional<Faculty> faculty = facultyRepository.findById(id);
+        if (faculty.isEmpty()) {
             throw new NoFoundException("faculty not found");
         }
-        return facultyRepository.findById(id).get();
+        return MapperModel.toFacultyDTO(faculty.get());
     }
 
     public Faculty updateFaculty(Faculty faculty) {
@@ -38,18 +45,27 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> getFacultyByColor(String color) {
+    public List<FacultyDTO> getFacultyByColor(String color) {
         if (color == null || color.isBlank()) {
             throw new IncorrectColorException("Incorrect color");
         }
-        return facultyRepository.findByColorIgnoreCase(color);
+        return facultyRepository.findByColorIgnoreCase(color).stream()
+                .map(MapperModel::toFacultyDTO)
+                .toList();
     }
 
-    public List<Faculty> getAllFaculty() {
-        return facultyRepository.findAll();
+    public List<FacultyDTO> getAllFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(MapperModel::toFacultyDTO)
+                .toList();
     }
 
-    public List<Student> getStudentsByFaculty(String color) {
-        return getFacultyByColor(color).get(0).getStudentsByFaculty();
+    public List<StudentDTO> getStudentsByFaculty(String color) {
+        return facultyRepository.findByColorIgnoreCase(color).stream()
+                .map(Faculty::getStudentsByFaculty)
+                .flatMap(Collection::stream)
+                .map(MapperModel::toStudentDTO)
+                .toList()
+                ;
     }
 }
