@@ -7,7 +7,6 @@ import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.List;
@@ -39,7 +38,7 @@ public class FacultyController {
 
     @GetMapping
     public ResponseEntity<List<FacultyDTO>> getFaculty(@RequestParam(required = false) String color,
-                                                    @RequestParam(required = false) String name) {
+                                                       @RequestParam(required = false) String name) {
         try {
             if (color != null) {
                 return ResponseEntity.ok(facultyService.getFacultyByColor(color));
@@ -55,7 +54,7 @@ public class FacultyController {
 
     @GetMapping("/{color}/student")
     public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
-        return  ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
+        return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
     }
 
     @PutMapping()

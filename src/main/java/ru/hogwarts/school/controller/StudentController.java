@@ -6,7 +6,6 @@ import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.AgeLessOneException;
 import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.NoFoundException;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -39,13 +38,10 @@ public class StudentController {
         }
     }
 
-//    @GetMapping("{id}/faculty")
-//    public ResponseEntity<>
-
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getStudent(@RequestParam(required = false) Integer age,
-                                                    @RequestParam(required = false) Integer min,
-                                                    @RequestParam(required = false) Integer max) {
+                                                       @RequestParam(required = false) Integer min,
+                                                       @RequestParam(required = false) Integer max) {
         try {
             if (age != null) {
                 return ResponseEntity.ok(studentService.getStudentByAge(age));

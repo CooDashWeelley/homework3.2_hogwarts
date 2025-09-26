@@ -65,7 +65,6 @@ public class FacultyService {
                 .map(Faculty::getStudentsByFaculty)
                 .flatMap(Collection::stream)
                 .map(MapperModel::toStudentDTO)
-                .toList()
-                ;
+                .toList();
     }
 }

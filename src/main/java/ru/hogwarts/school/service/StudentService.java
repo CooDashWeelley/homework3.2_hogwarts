@@ -6,7 +6,6 @@ import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.AgeLessOneException;
 import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.NoFoundException;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -51,23 +50,17 @@ public class StudentService {
                 .toList();
     }
 
-    public List<Student> getStudentByAge(int age) {
+    public List<StudentDTO> getStudentByAge(int age) {
         if (age < 1) {
             throw new AgeLessOneException("age less 1");
         }
-        return studentRepository.findByAge(age);
+        return MapperModel.toStudentDTOList(studentRepository.findByAge(age));
     }
 
-    public List<Student> findByAgeBetween(int min, int max) {
+    public List<StudentDTO> findByAgeBetween(int min, int max) {
         if (min > max || min < 1) {
             throw new IncorrectAgeException("incorrect parameters");
         }
-        return studentRepository.findByAgeBetween(min, max);
+        return MapperModel.toStudentDTOList(studentRepository.findByAgeBetween(min, max));
     }
-
-    public String getFaculty(Long id) {
-       return readStudent(id).getFaculty().toString();
-
-    }
-
 }
