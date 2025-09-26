@@ -1,19 +1,26 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.dto.MapperModel;
+import ru.hogwarts.school.dto.StudentDTO;
+import ru.hogwarts.school.exception.AgeLessOneException;
+import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
+    private final MapperModel mapper;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, MapperModel mapper) {
         this.studentRepository = studentRepository;
+        this.mapper = mapper;
     }
     //crud: create, read,  update, delete
 
@@ -21,11 +28,12 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Student readStudent(Long id) {
-        if(studentRepository.findById(id).isEmpty()) {
+    public StudentDTO readStudent(Long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isEmpty()) {
             throw new NoFoundException("student not found");
         }
-        return studentRepository.findById(id).get();
+        return MapperModel.toStudentDTO(student.get());
     }
 
     public Student updateStudent(Student student) {
@@ -36,12 +44,23 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List<Student> getAllStudent() {
-        return studentRepository.findAll();
+    public List<StudentDTO> getAllStudent() {
+        return studentRepository.findAll().stream()
+                .map(MapperModel::toStudentDTO)
+                .toList();
     }
 
-    public List<Student> getStudentByAge(int age) {
-        return studentRepository.findByAge(age);
+    public List<StudentDTO> getStudentByAge(int age) {
+        if (age < 1) {
+            throw new AgeLessOneException("age less 1");
+        }
+        return MapperModel.toStudentDTOList(studentRepository.findByAge(age));
     }
 
+    public List<StudentDTO> findByAgeBetween(int min, int max) {
+        if (min > max || min < 1) {
+            throw new IncorrectAgeException("incorrect parameters");
+        }
+        return MapperModel.toStudentDTOList(studentRepository.findByAgeBetween(min, max));
+    }
 }

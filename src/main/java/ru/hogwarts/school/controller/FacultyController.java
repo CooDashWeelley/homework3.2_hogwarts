@@ -2,6 +2,9 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.dto.FacultyDTO;
+import ru.hogwarts.school.dto.StudentDTO;
+import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
@@ -24,23 +27,34 @@ public class FacultyController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
-        try  {
-            Faculty faculty = facultyService.readFaculty(id);
+    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
+        try {
+            FacultyDTO faculty = facultyService.readFaculty(id);
             return ResponseEntity.ok(faculty);
         } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/color/{color}")
-    public ResponseEntity<List<Faculty>> getFacultyByColor(@PathVariable("color") String color) {
-        return ResponseEntity.ok(facultyService.getFacultyByColor(color));
+    @GetMapping
+    public ResponseEntity<List<FacultyDTO>> getFaculty(@RequestParam(required = false) String color,
+                                                       @RequestParam(required = false) String name) {
+        try {
+            if (color != null) {
+                return ResponseEntity.ok(facultyService.getFacultyByColor(color));
+            }
+//            if (name != null) {
+//                return ResponseEntity.ok(facultyService.getFacultyByName(name));
+//            }
+        } catch (IncorrectColorException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(facultyService.getAllFaculty());
     }
 
-    @GetMapping
-    public ResponseEntity<List<Faculty>> getAllFaculty() {
-        return ResponseEntity.ok(facultyService.getAllFaculty());
+    @GetMapping("/{color}/student")
+    public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
+        return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
     }
 
     @PutMapping()
@@ -54,6 +68,7 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteFaculty(@PathVariable Long id) {
+        facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
 }
