@@ -10,7 +10,8 @@ public class StudentDTO {
     private String facultyName;
     private String facultyColor;
 
-    public StudentDTO() {}
+    public StudentDTO() {
+    }
 
     public StudentDTO(Long id, String name, int age, Long facultyId, String facultyName, String facultyColor) {
         this.id = id;

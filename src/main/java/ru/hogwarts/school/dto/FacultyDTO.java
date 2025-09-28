@@ -1,21 +1,19 @@
 package ru.hogwarts.school.dto;
 
-import java.util.List;
 import java.util.Objects;
 
 public class FacultyDTO {
     private Long id;
     private String name;
     private String color;
-//    private List<StudentDTO> students;
 
-    public FacultyDTO() {}
+    public FacultyDTO() {
+    }
 
     public FacultyDTO(Long id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
-//        this.students = students;
     }
 
     @Override
@@ -24,7 +22,6 @@ public class FacultyDTO {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
-//                ", students=" + students +
                 '}';
     }
 
@@ -63,12 +60,4 @@ public class FacultyDTO {
     public void setColor(String color) {
         this.color = color;
     }
-
-//    public List<StudentDTO> getStudents() {
-//        return students;
-//    }
-//
-//    public void setStudents(List<StudentDTO> students) {
-//        this.students = students;
-//    }
 }

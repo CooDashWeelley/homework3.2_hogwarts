@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.MapperModel;
 import ru.hogwarts.school.dto.StudentDTO;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
@@ -26,14 +27,14 @@ public class FacultyService {
     //crud: create, read,  update, delete
 
     public FacultyDTO createFaculty(FacultyDTO facultyDTO) {
-         facultyRepository.save(MapperModel.toFaculty(facultyDTO));
-        return  facultyDTO;
+        facultyRepository.save(MapperModel.toFaculty(facultyDTO));
+        return facultyDTO;
     }
 
     public FacultyDTO readFaculty(Long id) {
         Optional<Faculty> faculty = facultyRepository.findById(id);
         if (faculty.isEmpty()) {
-            throw new NoFoundException("faculty not found");
+            throw new FacultyNotFoundException("faculty not found");
         }
         return MapperModel.toFacultyDTO(faculty.get());
     }
@@ -73,7 +74,7 @@ public class FacultyService {
     public List<StudentDTO> getStudentsByFacultyId(Long id) {
         Optional<Faculty> faculty = facultyRepository.findById(id);
         if (faculty.isEmpty()) {
-            throw new NoFoundException("faculty not found");
+            throw new FacultyNotFoundException("faculty not found");
         }
         return faculty.get().getStudentsByFaculty().stream()
                 .map(MapperModel::toStudentDTO)

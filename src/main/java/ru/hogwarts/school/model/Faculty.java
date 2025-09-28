@@ -22,10 +22,11 @@ public class Faculty {
     @JsonIgnore
     private List<Student> students;
 
-    public Faculty(){}
+    public Faculty() {
+    }
 
     public Faculty(String name, String color) {
-        this.name  =  name;
+        this.name = name;
         this.color = color;
     }
 
