@@ -21,8 +21,8 @@ public class FacultyController {
     }
 
     @PostMapping
-    public ResponseEntity<Faculty> addFaculty(@RequestBody Faculty faculty) {
-        Faculty newFaculty = facultyService.createFaculty(faculty);
+    public ResponseEntity<FacultyDTO> addFaculty(@RequestBody FacultyDTO facultyDTO) {
+        FacultyDTO newFaculty = facultyService.createFaculty(facultyDTO);
         return ResponseEntity.ok(newFaculty);
     }
 
@@ -67,8 +67,8 @@ public class FacultyController {
     }
 
     @PutMapping()
-    public ResponseEntity<Faculty> putFaculty(@RequestBody Faculty faculty) {
-        Faculty faculty1 = facultyService.updateFaculty(faculty);
+    public ResponseEntity<FacultyDTO> putFaculty(@RequestBody FacultyDTO facultyDTO) {
+        FacultyDTO faculty1 = facultyService.updateFaculty(facultyDTO);
         if (faculty1 == null) {
             return ResponseEntity.badRequest().build();
         }

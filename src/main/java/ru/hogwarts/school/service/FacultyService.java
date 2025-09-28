@@ -25,8 +25,9 @@ public class FacultyService {
     }
     //crud: create, read,  update, delete
 
-    public Faculty createFaculty(Faculty faculty) {
-        return facultyRepository.save(faculty);
+    public FacultyDTO createFaculty(FacultyDTO facultyDTO) {
+         facultyRepository.save(MapperModel.toFaculty(facultyDTO));
+        return  facultyDTO;
     }
 
     public FacultyDTO readFaculty(Long id) {
@@ -37,8 +38,9 @@ public class FacultyService {
         return MapperModel.toFacultyDTO(faculty.get());
     }
 
-    public Faculty updateFaculty(Faculty faculty) {
-        return facultyRepository.save(faculty);
+    public FacultyDTO updateFaculty(FacultyDTO facultyDTO) {
+        facultyRepository.save(MapperModel.toFaculty(facultyDTO));
+        return facultyDTO;
     }
 
     public void deleteFaculty(Long id) {

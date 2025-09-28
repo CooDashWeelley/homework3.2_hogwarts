@@ -4,7 +4,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.StudentDTO;
-import ru.hogwarts.school.exception.*;
+import ru.hogwarts.school.exception.AgeLessOneException;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
+import ru.hogwarts.school.exception.IncorrectAgeException;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -22,9 +25,8 @@ public class StudentController {
     //crud: create, read,  update, delete
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        Student newStudent = studentService.createStudent(student);
-        return ResponseEntity.ok(newStudent);
+    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
+        return ResponseEntity.ok(studentService.createStudent(studentDTO));
     }
 
     @GetMapping("{id}")
@@ -41,7 +43,7 @@ public class StudentController {
     public ResponseEntity<FacultyDTO> getFacultyByStudentId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
-        }catch (StudentNotFoundException | FacultyNotFoundException e){
+        } catch (StudentNotFoundException | FacultyNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -64,8 +66,8 @@ public class StudentController {
     }
 
     @PutMapping()
-    public ResponseEntity<Student> putStudent(@RequestBody Student student) {
-        Student student1 = studentService.updateStudent(student);
+    public ResponseEntity<StudentDTO> putStudent(@RequestBody StudentDTO studentDTO) {
+        StudentDTO student1 = studentService.updateStudent(studentDTO);
         if (student1 == null) {
             return ResponseEntity.badRequest().build();
         }

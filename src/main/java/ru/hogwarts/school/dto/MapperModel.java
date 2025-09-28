@@ -19,6 +19,13 @@ public class MapperModel {
         );
     }
 
+    public static Student toStudent(StudentDTO studentDTO) {
+        return new Student(
+                studentDTO.getName(),
+                studentDTO.getAge()
+        );
+    }
+
     public static List<StudentDTO> toStudentDTOList(List<Student> students) {
         return students.stream()
                 .map(MapperModel::toStudentDTO)
@@ -30,6 +37,13 @@ public class MapperModel {
                 faculty.getId(),
                 faculty.getName(),
                 faculty.getColor()
+        );
+    }
+
+    public static Faculty toFaculty(FacultyDTO facultyDTO) {
+        return new Faculty(
+                facultyDTO.getName(),
+                facultyDTO.getColor()
         );
     }
 }
