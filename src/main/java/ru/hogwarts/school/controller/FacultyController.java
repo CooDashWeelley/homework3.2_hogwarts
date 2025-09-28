@@ -36,6 +36,15 @@ public class FacultyController {
         }
     }
 
+    @GetMapping("/studentsByFacultyId/{id}")
+    public ResponseEntity<List<StudentDTO>> getStudentsOfFacultyById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
+        } catch (NoFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<FacultyDTO>> getFaculty(@RequestParam(required = false) String color,
                                                        @RequestParam(required = false) String name) {
@@ -52,7 +61,7 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getAllFaculty());
     }
 
-    @GetMapping("/{color}/student")
+    @GetMapping("/studentsByColor/{color}")
     public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
         return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
     }

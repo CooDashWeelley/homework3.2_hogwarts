@@ -2,10 +2,9 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.StudentDTO;
-import ru.hogwarts.school.exception.AgeLessOneException;
-import ru.hogwarts.school.exception.IncorrectAgeException;
-import ru.hogwarts.school.exception.NoFoundException;
+import ru.hogwarts.school.exception.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -33,7 +32,16 @@ public class StudentController {
         try {
             StudentDTO student = studentService.readStudent(id);
             return ResponseEntity.ok(student);
-        } catch (NoFoundException e) {
+        } catch (StudentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/facultyByStudentId/{id}")
+    public ResponseEntity<FacultyDTO> getFacultyByStudentId(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
+        }catch (StudentNotFoundException | FacultyNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }

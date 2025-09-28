@@ -1,11 +1,11 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.MapperModel;
 import ru.hogwarts.school.dto.StudentDTO;
-import ru.hogwarts.school.exception.AgeLessOneException;
-import ru.hogwarts.school.exception.IncorrectAgeException;
-import ru.hogwarts.school.exception.NoFoundException;
+import ru.hogwarts.school.exception.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -31,7 +31,7 @@ public class StudentService {
     public StudentDTO readStudent(Long id) {
         Optional<Student> student = studentRepository.findById(id);
         if (student.isEmpty()) {
-            throw new NoFoundException("student not found");
+            throw new StudentNotFoundException("student not found");
         }
         return MapperModel.toStudentDTO(student.get());
     }
@@ -62,5 +62,17 @@ public class StudentService {
             throw new IncorrectAgeException("incorrect parameters");
         }
         return MapperModel.toStudentDTOList(studentRepository.findByAgeBetween(min, max));
+    }
+
+    public FacultyDTO getFacultyByStudentId(Long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isEmpty()) {
+            throw new StudentNotFoundException("student not found");
+        }
+        Faculty faculty = student.get().getFaculty();
+        if (faculty == null) {
+            throw  new FacultyNotFoundException("faculty not found");
+        }
+        return MapperModel.toFacultyDTO(faculty);
     }
 }

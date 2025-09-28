@@ -67,4 +67,14 @@ public class FacultyService {
                 .map(MapperModel::toStudentDTO)
                 .toList();
     }
+
+    public List<StudentDTO> getStudentsByFacultyId(Long id) {
+        Optional<Faculty> faculty = facultyRepository.findById(id);
+        if (faculty.isEmpty()) {
+            throw new NoFoundException("faculty not found");
+        }
+        return faculty.get().getStudentsByFaculty().stream()
+                .map(MapperModel::toStudentDTO)
+                .toList();
+    }
 }
