@@ -20,10 +20,14 @@ public class Student {
     @JsonIgnore
     private Faculty faculty;
 
+    @OneToOne(mappedBy = "student")
+    private Avatar avatar;
+
     public Student() {
     }
 
-    public Student(String name, int age) {
+    public Student(Long id, String name, int age) {
+        this.id = id;
         this.name = name;
         this.age = age;
     }
