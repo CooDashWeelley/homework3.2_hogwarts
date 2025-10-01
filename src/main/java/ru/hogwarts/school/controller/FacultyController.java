@@ -2,8 +2,10 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.dto.FacultyDTO;
+import ru.hogwarts.school.dto.StudentDTO;
+import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.List;
@@ -18,34 +20,54 @@ public class FacultyController {
     }
 
     @PostMapping
-    public ResponseEntity<Faculty> addFaculty(@RequestBody Faculty faculty) {
-        Faculty newFaculty = facultyService.createFaculty(faculty);
+    public ResponseEntity<FacultyDTO> addFaculty(@RequestBody FacultyDTO facultyDTO) {
+        FacultyDTO newFaculty = facultyService.createFaculty(facultyDTO);
         return ResponseEntity.ok(newFaculty);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
-        try  {
-            Faculty faculty = facultyService.readFaculty(id);
+    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
+        try {
+            FacultyDTO faculty = facultyService.readFaculty(id);
             return ResponseEntity.ok(faculty);
         } catch (NoFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/color/{color}")
-    public ResponseEntity<List<Faculty>> getFacultyByColor(@PathVariable("color") String color) {
-        return ResponseEntity.ok(facultyService.getFacultyByColor(color));
+    @GetMapping("/studentsByFacultyId/{id}")
+    public ResponseEntity<List<StudentDTO>> getStudentsOfFacultyById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
+        } catch (NoFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<Faculty>> getAllFaculty() {
+    public ResponseEntity<List<FacultyDTO>> getFaculty(@RequestParam(required = false) String color,
+                                                       @RequestParam(required = false) String name) {
+        try {
+            if (color != null) {
+                return ResponseEntity.ok(facultyService.getFacultyByColor(color));
+            }
+//            if (name != null) {
+//                return ResponseEntity.ok(facultyService.getFacultyByName(name));
+//            }
+        } catch (IncorrectColorException e) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(facultyService.getAllFaculty());
     }
 
+    @GetMapping("/studentsByColor/{color}")
+    public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
+        return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
+    }
+
     @PutMapping()
-    public ResponseEntity<Faculty> putFaculty(@RequestBody Faculty faculty) {
-        Faculty faculty1 = facultyService.updateFaculty(faculty);
+    public ResponseEntity<FacultyDTO> putFaculty(@RequestBody FacultyDTO facultyDTO) {
+        FacultyDTO faculty1 = facultyService.updateFaculty(facultyDTO);
         if (faculty1 == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -54,6 +76,7 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteFaculty(@PathVariable Long id) {
+        facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
 }
