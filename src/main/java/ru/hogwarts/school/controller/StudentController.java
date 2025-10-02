@@ -38,7 +38,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/facultyByStudentId/{id}")
+    @GetMapping("/{id}/facultyByStudentId")
     public ResponseEntity<FacultyDTO> getFacultyByStudentId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
