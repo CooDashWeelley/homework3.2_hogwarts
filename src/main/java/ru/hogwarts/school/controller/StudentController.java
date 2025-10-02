@@ -21,8 +21,6 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    //crud: create, read,  update, delete
-
     @PostMapping
     public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
         return ResponseEntity.ok(studentService.createStudent(studentDTO));
@@ -38,7 +36,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/facultyByStudentId/{id}")
+    @GetMapping("/{id}/facultyByStudentId")
     public ResponseEntity<FacultyDTO> getFacultyByStudentId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
