@@ -62,7 +62,7 @@ public class FacultyController {
 
     @GetMapping("/studentsByColor/{color}")
     public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
-        return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyColor(color));
     }
 
     @PutMapping()

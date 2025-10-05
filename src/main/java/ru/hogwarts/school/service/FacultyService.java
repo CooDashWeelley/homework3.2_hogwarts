@@ -6,7 +6,6 @@ import ru.hogwarts.school.dto.MapperModel;
 import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.IncorrectColorException;
-import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
@@ -63,7 +62,7 @@ public class FacultyService {
                 .toList();
     }
 
-    public List<StudentDTO> getStudentsByFaculty(String color) {
+    public List<StudentDTO> getStudentsByFacultyColor(String color) {
         return facultyRepository.findByColorIgnoreCase(color).stream()
                 .map(Faculty::getStudentsByFaculty)
                 .flatMap(Collection::stream)
