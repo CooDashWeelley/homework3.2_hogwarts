@@ -32,7 +32,7 @@ public class StudentService {
 //    }
 
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        studentRepository.save(MapperModel.toStudent(studentDTO));
+        studentRepository.save(MapperModel.toNewStudent(studentDTO));
         return studentDTO;
     }
 

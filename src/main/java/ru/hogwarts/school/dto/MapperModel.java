@@ -21,6 +21,13 @@ public class MapperModel {
 
     public static Student toStudent(StudentDTO studentDTO) {
         return new Student(
+                studentDTO.getId(),
+                studentDTO.getName(),
+                studentDTO.getAge()
+        );
+    }
+    public static Student toNewStudent(StudentDTO studentDTO) {
+        return new Student(
                 studentDTO.getName(),
                 studentDTO.getAge()
         );

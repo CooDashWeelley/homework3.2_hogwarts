@@ -1,9 +1,6 @@
 package ru.hogwarts.school.controller;
 
-//import org.junit.jupiter.api.Assertions;
-
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.StudentDTO;
-import ru.hogwarts.school.model.Student;
 
 import java.util.List;
 
@@ -31,19 +27,17 @@ public class StudentControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-
     @Test
     public void testAddStudent() {
-
+        Long id = 100L;
         String name = "test";
         int age = 10;
-        Student student = new Student(name, age);
+        StudentDTO student = new StudentDTO(id, name, age);
 
-        Assertions
-                .assertThat(this.restTemplate.postForObject(
-                        "http://localhost:" + port + "/hogwarts/student",
-                        student,
-                        Student.class))
+        assertThat(this.restTemplate.postForObject(
+                "http://localhost:" + port + "/hogwarts/student",
+                student,
+                StudentDTO.class))
                 .isNotNull()
                 .isEqualTo(student);
     }
@@ -51,8 +45,8 @@ public class StudentControllerTest {
     @Test
     public void testGetStudentById() {
         Long id = 202L;
-        String name = "test";
-        int age = 10;
+        String name = "test2";
+        int age = 12;
         StudentDTO student = new StudentDTO(id, name, age, null, null, null);
         //в базе заранее есть студент с такими параметрами
 
@@ -79,13 +73,43 @@ public class StudentControllerTest {
 
     @Test
     public void testGetStudent() {
-        Assertions.assertThat(this.restTemplate.getForObject(
-                        "http://localhost:" + port + "/hogwarts/student",
-                        List.class))
+        assertThat(this.restTemplate.getForObject(
+                "http://localhost:" + port + "/hogwarts/student",
+                List.class))
                 .isNotNull();
     }
 
+    @Test
+    public void testPutStudent() {
+        Long id = 202L;
+        String name = "test2";
+        int age = 12;
+        StudentDTO updatedStudent = new StudentDTO(id, name, age, null, null, null);
+        restTemplate.put(
+                "/hogwarts/student",
+                updatedStudent,
+                StudentDTO.class
+        );
+        ResponseEntity<StudentDTO> response = restTemplate.getForEntity(
+                "/hogwarts/student/{id}",
+                StudentDTO.class,
+                id
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(updatedStudent);
+        assertThat(response.getBody().getId()).isEqualTo(id);
+    }
 
-
+    @Test
+    public void testDeleteStudent() {
+        Long id = 702L;
+        restTemplate.delete("/hogwarts/student/{id}", id);
+        ResponseEntity response = restTemplate.getForEntity(
+                "/hogwarts/student/{id}",
+                StudentDTO.class,
+                id
+        );
+        assertThat(response.getBody()).isNull();
+    }
 
 }
