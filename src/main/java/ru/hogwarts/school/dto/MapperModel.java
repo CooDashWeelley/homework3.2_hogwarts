@@ -19,15 +19,16 @@ public class MapperModel {
         );
     }
 
-    public static Student toStudent(StudentDTO studentDTO) {
+    public static Student toNewStudent(StudentDTO studentDTO) {
         return new Student(
-                studentDTO.getId(),
                 studentDTO.getName(),
                 studentDTO.getAge()
         );
     }
-    public static Student toNewStudent(StudentDTO studentDTO) {
+
+    public static Student toStudent(StudentDTO studentDTO) {
         return new Student(
+                studentDTO.getId(),
                 studentDTO.getName(),
                 studentDTO.getAge()
         );
@@ -47,8 +48,15 @@ public class MapperModel {
         );
     }
 
+    public static Faculty toNewFaculty(FacultyDTO facultyDTO) {
+        return new Faculty(
+                facultyDTO.getName(),
+                facultyDTO.getColor()
+        );
+    }
     public static Faculty toFaculty(FacultyDTO facultyDTO) {
         return new Faculty(
+                facultyDTO.getId(),
                 facultyDTO.getName(),
                 facultyDTO.getColor()
         );

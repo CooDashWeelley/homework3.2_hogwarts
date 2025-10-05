@@ -27,7 +27,7 @@ public class FacultyService {
     //crud: create, read,  update, delete
 
     public FacultyDTO createFaculty(FacultyDTO facultyDTO) {
-        facultyRepository.save(MapperModel.toFaculty(facultyDTO));
+        facultyRepository.save(MapperModel.toNewFaculty(facultyDTO));
         return facultyDTO;
     }
 

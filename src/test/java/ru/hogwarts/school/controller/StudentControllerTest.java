@@ -101,7 +101,7 @@ public class StudentControllerTest {
 
     @Test
     public void testDeleteStudent() {
-        Long id = 702L;
+        Long id = 202L;
         restTemplate.delete("/hogwarts/student/{id}", id);
         ResponseEntity response = restTemplate.getForEntity(
                 "/hogwarts/student/{id}",
@@ -110,5 +110,4 @@ public class StudentControllerTest {
         );
         assertThat(response.getBody()).isNull();
     }
-
 }
