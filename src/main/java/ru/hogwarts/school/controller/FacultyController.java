@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.StudentDTO;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.IncorrectColorException;
 import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.service.FacultyService;
@@ -30,16 +31,16 @@ public class FacultyController {
         try {
             FacultyDTO faculty = facultyService.readFaculty(id);
             return ResponseEntity.ok(faculty);
-        } catch (NoFoundException e) {
+        } catch (FacultyNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/studentsByFacultyId/{id}")
+    @GetMapping("/{id}/studentsByFacultyId")
     public ResponseEntity<List<StudentDTO>> getStudentsOfFacultyById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
-        } catch (NoFoundException e) {
+        } catch (FacultyNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

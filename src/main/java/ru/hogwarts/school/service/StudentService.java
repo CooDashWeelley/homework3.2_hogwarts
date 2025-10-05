@@ -25,14 +25,9 @@ public class StudentService {
         this.studentRepository = studentRepository;
         this.mapper = mapper;
     }
-    //crud: create, read,  update, delete
-
-//    public Student createStudent(Student student) {
-//        return studentRepository.save(student);
-//    }
 
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        studentRepository.save(MapperModel.toStudent(studentDTO));
+        studentRepository.save(MapperModel.toNewStudent(studentDTO));
         return studentDTO;
     }
 
