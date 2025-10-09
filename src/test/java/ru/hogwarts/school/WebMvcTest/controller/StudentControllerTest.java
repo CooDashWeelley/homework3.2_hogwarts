@@ -18,7 +18,6 @@ import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -176,10 +175,8 @@ public class StudentControllerTest {
         Long id = 1L;
         Mockito.doNothing().when(studentService).deleteStudent(id);
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/hogwarts/student/{id}", id)
-        )
+                        .delete("/hogwarts/student/{id}", id)
+                )
                 .andExpect(status().isOk());
     }
-
-
 }
