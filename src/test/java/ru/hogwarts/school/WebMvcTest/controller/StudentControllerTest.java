@@ -146,26 +146,39 @@ public class StudentControllerTest {
 
     @Test
     public void testPutStudent() throws Exception {
-        StudentDTO studentDTO = new StudentDTO(1L, "test", 11, null,null,null);
+        StudentDTO studentDTO = new StudentDTO(1L, "test", 11, null, null, null);
 
-        Long id  = 2L;
+        Long id = 2L;
         String name = "test2";
         int age = 22;
-        StudentDTO updatedStudentDTO = new StudentDTO(id, name, age, null,null,null);
+        StudentDTO updatedStudentDTO = new StudentDTO(id, name, age, null, null, null);
 
         JSONObject studentJSON = new JSONObject();
         studentJSON.put("id", id);
         studentJSON.put("name", name);
         studentJSON.put("age", age);
 
-        Mockito.when(studentService.updateStudent(any(StudentDTO.class))).thenReturn(studentDTO);
+        Mockito.when(studentService.updateStudent(any(StudentDTO.class))).thenReturn(updatedStudentDTO);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/hogwarts/student", updatedStudentDTO)
-                .content(studentJSON.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
+                        .put("/hogwarts/student", updatedStudentDTO)
+                        .content(studentJSON.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.age").value(age));
+    }
+
+    @Test
+    public void testDeleteStudent() throws Exception {
+        Long id = 1L;
+        Mockito.doNothing().when(studentService).deleteStudent(id);
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/hogwarts/student/{id}", id)
         )
-                .andExpect()
+                .andExpect(status().isOk());
     }
 
 
