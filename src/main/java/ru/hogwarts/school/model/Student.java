@@ -20,6 +20,9 @@ public class Student {
     @JsonIgnore
     private Faculty faculty;
 
+    @OneToOne(mappedBy = "student")
+    private Avatar avatar;
+
     public Student() {
     }
 

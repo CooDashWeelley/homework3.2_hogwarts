@@ -36,7 +36,7 @@ public class FacultyController {
         }
     }
 
-    @GetMapping("/studentsByFacultyId/{id}")
+    @GetMapping("/{id}/studentsByFacultyId")
     public ResponseEntity<List<StudentDTO>> getStudentsOfFacultyById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
@@ -63,7 +63,7 @@ public class FacultyController {
 
     @GetMapping("/studentsByColor/{color}")
     public ResponseEntity<List<StudentDTO>> getStudentByColor(@PathVariable String color) {
-        return ResponseEntity.ok(facultyService.getStudentsByFaculty(color));
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyColor(color));
     }
 
     @PutMapping()

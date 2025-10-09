@@ -54,6 +54,7 @@ public class MapperModel {
                 facultyDTO.getColor()
         );
     }
+
     public static Faculty toFaculty(FacultyDTO facultyDTO) {
         return new Faculty(
                 facultyDTO.getId(),
