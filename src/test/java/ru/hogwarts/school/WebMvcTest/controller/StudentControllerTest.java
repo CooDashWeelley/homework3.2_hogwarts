@@ -37,9 +37,6 @@ public class StudentControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private StudentRepository studentRepository;
-
-    @MockitoBean
     private StudentService studentService;
 
     @InjectMocks
