@@ -18,8 +18,12 @@ import java.util.Optional;
 @Service
 public class StudentService {
 
-    private final StudentRepository studentRepository;
-    private final MapperModel mapper;
+    private  StudentRepository studentRepository;
+    private  MapperModel mapper;
+
+//    public StudentService(){
+//
+//    }
 
     public StudentService(StudentRepository studentRepository, MapperModel mapper) {
         this.studentRepository = studentRepository;
