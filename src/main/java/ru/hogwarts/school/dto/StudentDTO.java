@@ -21,6 +21,12 @@ public class StudentDTO {
         this.facultyName = facultyName;
         this.facultyColor = facultyColor;
     }
+    public StudentDTO(Long id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
 
     @Override
     public String toString() {

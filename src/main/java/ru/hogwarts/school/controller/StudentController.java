@@ -21,8 +21,6 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    //crud: create, read,  update, delete
-
     @PostMapping
     public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO) {
         return ResponseEntity.ok(studentService.createStudent(studentDTO));
