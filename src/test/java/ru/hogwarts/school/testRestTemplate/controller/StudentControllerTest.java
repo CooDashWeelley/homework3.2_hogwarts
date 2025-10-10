@@ -1,4 +1,4 @@
-package ru.hogwarts.school.controller.testRestTemplate;
+package ru.hogwarts.school.testRestTemplate.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

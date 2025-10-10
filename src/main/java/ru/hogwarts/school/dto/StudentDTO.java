@@ -25,13 +25,9 @@ public class StudentDTO {
         this.id = id;
         this.name = name;
         this.age = age;
-    }
-
-
-    public StudentDTO(Long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+        this.facultyId = null;
+        this.facultyName = null;
+        this.facultyColor = null;
     }
 
     @Override
