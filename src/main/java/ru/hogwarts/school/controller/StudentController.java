@@ -8,6 +8,8 @@ import ru.hogwarts.school.exception.AgeLessOneException;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.IncorrectAgeException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
+import ru.hogwarts.school.repository.specificRequest.AverageAge;
+import ru.hogwarts.school.repository.specificRequest.NumberOfStudents;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
@@ -60,6 +62,21 @@ public class StudentController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(studentService.getAllStudent());
+    }
+
+    @GetMapping("/numberOf")
+    public ResponseEntity<List<NumberOfStudents>> getNumberOfStudent() {
+        return ResponseEntity.ok(studentService.getNumberOfStudents());
+    }
+
+    @GetMapping("/avgAge")
+    public ResponseEntity<List<AverageAge>> getAverageAge() {
+        return ResponseEntity.ok(studentService.getAverageAge());
+    }
+
+    @GetMapping("/lastFive")
+    public ResponseEntity<List<StudentDTO>> getLastFIveStudent() {
+        return ResponseEntity.ok(studentService.getLastFiveStudent());
     }
 
     @PutMapping()

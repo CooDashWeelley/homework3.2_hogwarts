@@ -11,6 +11,8 @@ import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.repository.specificRequest.AverageAge;
+import ru.hogwarts.school.repository.specificRequest.NumberOfStudents;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +20,8 @@ import java.util.Optional;
 @Service
 public class StudentService {
 
-    private  StudentRepository studentRepository;
-    private  MapperModel mapper;
+    private StudentRepository studentRepository;
+    private MapperModel mapper;
 
 //    public StudentService(){
 //
@@ -82,5 +84,17 @@ public class StudentService {
             throw new FacultyNotFoundException("faculty not found");
         }
         return MapperModel.toFacultyDTO(faculty);
+    }
+
+    public List<NumberOfStudents> getNumberOfStudents() {
+        return studentRepository.getNumberOfStudents();
+    }
+
+    public List<AverageAge> getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    public List<StudentDTO> getLastFiveStudent() {
+        return MapperModel.toStudentDTOList(studentRepository.getLastFiveStudent());
     }
 }
