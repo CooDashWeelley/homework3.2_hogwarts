@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class FacultyService {
 
-    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    private final Logger logger = LoggerFactory.getLogger(FacultyService.class);
 
     private final FacultyRepository facultyRepository;
     private final MapperModel mapper;
