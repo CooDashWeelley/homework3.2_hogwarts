@@ -6,7 +6,6 @@ import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.StudentDTO;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.IncorrectColorException;
-import ru.hogwarts.school.exception.NoFoundException;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.List;

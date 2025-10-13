@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.dto.FacultyDTO;
 import ru.hogwarts.school.dto.MapperModel;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @Service
 public class FacultyService {
 
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+
     private final FacultyRepository facultyRepository;
     private final MapperModel mapper;
 
@@ -26,29 +30,36 @@ public class FacultyService {
     //crud: create, read,  update, delete
 
     public FacultyDTO createFaculty(FacultyDTO facultyDTO) {
+        logger.info("Was invoke method createFaculty");
         facultyRepository.save(MapperModel.toNewFaculty(facultyDTO));
         return facultyDTO;
     }
 
     public FacultyDTO readFaculty(Long id) {
+        logger.info("Was invoke method readFaculty");
         Optional<Faculty> faculty = facultyRepository.findById(id);
         if (faculty.isEmpty()) {
+            logger.error("There is not faculty with id = {}", id);
             throw new FacultyNotFoundException("faculty not found");
         }
         return MapperModel.toFacultyDTO(faculty.get());
     }
 
     public FacultyDTO updateFaculty(FacultyDTO facultyDTO) {
+        logger.info("Was invoke method updateFaculty");
         facultyRepository.save(MapperModel.toFaculty(facultyDTO));
         return facultyDTO;
     }
 
     public void deleteFaculty(Long id) {
+        logger.info("Was invoke method deleteFaculty");
         facultyRepository.deleteById(id);
     }
 
     public List<FacultyDTO> getFacultyByColor(String color) {
+        logger.info("Was invoke method getFacultyByColor");
         if (color == null || color.isBlank()) {
+            logger.error("color is null or isBlank for getFacultyByColor");
             throw new IncorrectColorException("Incorrect color");
         }
         return facultyRepository.findByColorIgnoreCase(color).stream()
@@ -57,12 +68,18 @@ public class FacultyService {
     }
 
     public List<FacultyDTO> getAllFaculty() {
+        logger.info("Was invoke method getAllFaculty");
         return facultyRepository.findAll().stream()
                 .map(MapperModel::toFacultyDTO)
                 .toList();
     }
 
     public List<StudentDTO> getStudentsByFacultyColor(String color) {
+        logger.info("Was invoke method getStudentByFacultyColor");
+        if (color == null || color.isBlank()) {
+            logger.error("color is null or isBlank for getStudentByFacultyColor");
+            throw new IncorrectColorException("Incorrect color");
+        }
         return facultyRepository.findByColorIgnoreCase(color).stream()
                 .map(Faculty::getStudentsByFaculty)
                 .flatMap(Collection::stream)
@@ -71,8 +88,10 @@ public class FacultyService {
     }
 
     public List<StudentDTO> getStudentsByFacultyId(Long id) {
+        logger.info("Was invoke method getStudentsByFacultyId");
         Optional<Faculty> faculty = facultyRepository.findById(id);
         if (faculty.isEmpty()) {
+            logger.error("faculty with id = {} is empty", id);
             throw new FacultyNotFoundException("faculty not found");
         }
         return faculty.get().getStudentsByFaculty().stream()
