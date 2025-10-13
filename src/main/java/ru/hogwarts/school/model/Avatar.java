@@ -21,6 +21,7 @@ public class Avatar {
 
     @OneToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnore
     private Student student;
 
     @Override
