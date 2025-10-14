@@ -65,6 +65,11 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getStudentsByFacultyColor(color));
     }
 
+    @GetMapping("/longestName")
+    public ResponseEntity<FacultyDTO> getFacultyWithMaxLength() {
+        return  ResponseEntity.ok(facultyService.getFacultyWithMaxLength());
+    }
+
     @PutMapping()
     public ResponseEntity<FacultyDTO> putFaculty(@RequestBody FacultyDTO facultyDTO) {
         FacultyDTO faculty1 = facultyService.updateFaculty(facultyDTO);

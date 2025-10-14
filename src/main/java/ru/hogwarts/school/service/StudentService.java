@@ -16,8 +16,10 @@ import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.repository.specificRequest.AverageAge;
 import ru.hogwarts.school.repository.specificRequest.NumberOfStudents;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -116,5 +118,25 @@ public class StudentService {
     public List<StudentDTO> getLastFiveStudent() {
         logger.info("Was invoke method getLastFiveStudent");
         return MapperModel.toStudentDTOList(studentRepository.getLastFiveStudent());
+    }
+
+    public List<StudentDTO> getStudentStartWithLetter(String letter) {
+        logger.info("was invoked method getStudentStartWithLetter");
+        return studentRepository.findAll().stream()
+                .parallel()
+                .map(MapperModel::toStudentDTO)
+                .filter(e -> e.getName().startsWith(letter))
+                .sorted(Comparator.comparing(StudentDTO::getName))
+                .peek(e -> e.setName(e.getName().toUpperCase()))
+                .collect(Collectors.toList());
+    }
+
+    public Double getAverageAgeOfStudent() {
+        logger.info("was invoked method getAverageAgeOfStudent");
+        return studentRepository.findAll().stream()
+                .parallel()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
     }
 }

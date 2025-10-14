@@ -17,7 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/hogwarts/student")
 public class StudentController {
-    StudentService studentService;
+
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -77,6 +78,16 @@ public class StudentController {
     @GetMapping("/lastFive")
     public ResponseEntity<List<StudentDTO>> getLastFIveStudent() {
         return ResponseEntity.ok(studentService.getLastFiveStudent());
+    }
+
+    @GetMapping("/start{letter}")
+    public ResponseEntity<List<StudentDTO>> getStudentStartWithLetter(@PathVariable String letter) {
+        return ResponseEntity.ok(studentService.getStudentStartWithLetter(letter));
+    }
+
+    @GetMapping("/avgAge4_5")
+    public ResponseEntity<Double> getAverageAgeOfStudent() {
+        return ResponseEntity.ok(studentService.getAverageAgeOfStudent());
     }
 
     @PutMapping()
