@@ -12,6 +12,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,5 +98,13 @@ public class FacultyService {
         return faculty.get().getStudentsByFaculty().stream()
                 .map(MapperModel::toStudentDTO)
                 .toList();
+    }
+
+    public FacultyDTO getFacultyWithMaxLength() {
+        return facultyRepository.findAll().stream()
+                .parallel()
+                .reduce((p1, p2) -> p1.getName().length() > p2.getName().length() ? p1 : p2)
+                .map(MapperModel::toFacultyDTO)
+                .orElse(null);
     }
 }
