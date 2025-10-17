@@ -29,6 +29,8 @@ public class StudentService {
     private StudentRepository studentRepository;
     private MapperModel mapper;
 
+    Object object = new Object();
+
 //    public StudentService(){
 //
 //    }
@@ -138,5 +140,27 @@ public class StudentService {
                 .mapToInt(Student::getAge)
                 .average()
                 .orElse(0.0);
+    }
+
+    public void getParallel(int index) {
+        logger.info("was  invoked getParallel");
+        List<String> students = studentRepository.findAll().stream()
+                .map(Student::getName)
+                .limit(6)
+                .toList();
+        System.out.println(students.get(index));
+        logger.info("getParallel finished");
+    }
+
+    public void getSynchronized(int index) {
+        logger.info("was  invoked getSynchronized");
+        List<String> students = studentRepository.findAll().stream()
+                .map(Student::getName)
+                .limit(6)
+                .toList();
+        synchronized (object) {
+            System.out.println(students.get(index));
+        }
+        logger.info("getSynchronized finished");
     }
 }

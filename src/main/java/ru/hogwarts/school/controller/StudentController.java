@@ -90,6 +90,34 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAverageAgeOfStudent());
     }
 
+    @GetMapping("/print-parallel")
+    public void getParallel() {
+        studentService.getParallel(0);
+        studentService.getParallel(1);
+        new Thread(() -> {
+            studentService.getParallel(2);
+            studentService.getParallel(3);
+        }).start();
+        new Thread(() -> {
+            studentService.getParallel(4);
+            studentService.getParallel(5);
+        }).start();
+    }
+
+    @GetMapping("/print-synchronized")
+    public void getSynchronized() {
+        studentService.getSynchronized(0);
+        studentService.getSynchronized(1);
+        new Thread(() ->{
+            studentService.getSynchronized(2);
+            studentService.getSynchronized(3);
+        }).start();
+        new Thread(() ->{
+            studentService.getSynchronized(4);
+            studentService.getSynchronized(5);
+        }).start();
+    }
+
     @PutMapping()
     public ResponseEntity<StudentDTO> putStudent(@RequestBody StudentDTO studentDTO) {
         StudentDTO student1 = studentService.updateStudent(studentDTO);
