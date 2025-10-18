@@ -142,25 +142,47 @@ public class StudentService {
                 .orElse(0.0);
     }
 
-    public void getParallel(int index) {
+    public void getParallel() {
         logger.info("was  invoked getParallel");
-        List<String> students = studentRepository.findAll().stream()
-                .map(Student::getName)
-                .limit(6)
+        List<StudentDTO> studentDTOs = studentRepository.findAll().stream()
+                .map(MapperModel::toStudentDTO)
                 .toList();
-        System.out.println(students.get(index));
+
+        studentDTOs.subList(0, 2).forEach(this::printName);
+
+        new Thread(() -> {
+            studentDTOs.subList(2, 4).forEach(this::printName);
+        }).start();
+
+        new Thread(() -> {
+            studentDTOs.subList(4, 6).forEach(this::printName);
+        }).start();
+
         logger.info("getParallel finished");
     }
 
-    public void getSynchronized(int index) {
-        logger.info("was  invoked getSynchronized");
-        List<String> students = studentRepository.findAll().stream()
-                .map(Student::getName)
-                .limit(6)
+    private void printName(StudentDTO student) {
+        System.out.println(student.getName());
+    }
+
+    public void printStudentSync() {
+        logger.info("was  invoked printStudentSync");
+        List<StudentDTO> students = studentRepository.findAll().stream()
+                .map(MapperModel::toStudentDTO)
                 .toList();
-        synchronized (object) {
-            System.out.println(students.get(index));
-        }
-        logger.info("getSynchronized finished");
+        students.subList(0, 2).forEach(this::printNameSync);
+        getStudentSync(students.subList(2, 4));
+        getStudentSync(students.subList(4, 6));
+        logger.info("printStudentSync finished");
+    }
+
+    private void getStudentSync(List<StudentDTO> students) {
+        new Thread(() -> {
+            students.forEach(this::printNameSync);
+        }).start();
+    }
+
+    private synchronized void printNameSync(StudentDTO student) {
+        System.out.println(student.getName());
     }
 }
