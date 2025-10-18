@@ -29,6 +29,8 @@ public class StudentService {
     private StudentRepository studentRepository;
     private MapperModel mapper;
 
+    Object object = new Object();
+
 //    public StudentService(){
 //
 //    }
@@ -138,5 +140,49 @@ public class StudentService {
                 .mapToInt(Student::getAge)
                 .average()
                 .orElse(0.0);
+    }
+
+    public void getParallel() {
+        logger.info("was  invoked getParallel");
+        List<StudentDTO> studentDTOs = studentRepository.findAll().stream()
+                .map(MapperModel::toStudentDTO)
+                .toList();
+
+        studentDTOs.subList(0, 2).forEach(this::printName);
+
+        new Thread(() -> {
+            studentDTOs.subList(2, 4).forEach(this::printName);
+        }).start();
+
+        new Thread(() -> {
+            studentDTOs.subList(4, 6).forEach(this::printName);
+        }).start();
+
+        logger.info("getParallel finished");
+    }
+
+    private void printName(StudentDTO student) {
+        System.out.println(student.getName());
+    }
+
+    public void printStudentSync() {
+        logger.info("was  invoked printStudentSync");
+        List<StudentDTO> students = studentRepository.findAll().stream()
+                .map(MapperModel::toStudentDTO)
+                .toList();
+        students.subList(0, 2).forEach(this::printNameSync);
+        getStudentSync(students.subList(2, 4));
+        getStudentSync(students.subList(4, 6));
+        logger.info("printStudentSync finished");
+    }
+
+    private void getStudentSync(List<StudentDTO> students) {
+        new Thread(() -> {
+            students.forEach(this::printNameSync);
+        }).start();
+    }
+
+    private synchronized void printNameSync(StudentDTO student) {
+        System.out.println(student.getName());
     }
 }
